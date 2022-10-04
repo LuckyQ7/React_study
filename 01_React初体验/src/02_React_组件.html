@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>组件</title>
+</head>
+
+<body>
+    <div id="app"></div>
+    <div id="root"></div>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+
+    <script type="text/babel">
+        const root = ReactDOM.createRoot(document.querySelector('#root'));
+        const app = ReactDOM.createRoot(document.querySelector('#app'));
+
+        const { useState } = React
+
+        class App extends React.Component {
+            state = {
+                message: '类组件'
+            }
+
+            onClick() {
+                this.setState({
+                    message: "我是类组件"
+                })
+            }
+
+            render() {
+                const { message } = this.state
+                return (
+                    <div>
+                        <h1 onClick={this.onClick.bind(this)}>{message}</h1>
+                    </div>
+
+                )
+            }
+        }
+
+        function Button() {
+            let [on, setOn] = useState(true);
+
+            return (
+                <div>
+                    <button onClick={() => { setOn(on = !on) }}>函数组件  {on ? '开' : '关'}</button>
+                </div>
+
+            )
+        }
+
+        app.render(<App />);
+        root.render(<Button />);
+    </script>
+</body>
+
+</html>
