@@ -17,7 +17,13 @@
     <script type="text/babel">
         const domContainer = document.querySelector('#app');
         const root = ReactDOM.createRoot(domContainer);
-        root.render(<h2>Hello React</h2>);
+        let message = 'Hello React'
+        root.render((
+            <div>
+                <h2>{message}</h2>
+                <button >修改文本</button>
+            </div>
+        ));
     </script>
 
 </body>
