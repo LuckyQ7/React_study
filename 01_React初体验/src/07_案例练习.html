@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>计数器案例</title>
+    <style>
+        table {
+            border-collapse: collapse;
+        }
+
+        thead {
+            background-color: #f9f8f9;
+            color: #4e5258;
+        }
+
+        table th,
+        td {
+            padding: 10px 20px;
+            border: 0.5px solid #ccc;
+        }
+
+        button {
+            border: none;
+            background-color: #409eff;
+            color: #fff;
+            outline: none;
+            padding: 8px 15px;
+            user-select: none;
+            vertical-align: middle;
+            touch-action: manipulation;
+            border-radius: 5px;
+            transition: .1s;
+        }
+
+        button:hover {
+            background-color: #79bbff;
+            border-color: #79bbff;
+        }
+
+        button:active {
+            background-color: #337ecc;
+            border-color: #337ecc;
+        }
+
+        button:disabled {
+            background-color: #ccc;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app"></div>
+
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+
+    <script type="text/babel">
+        const app = ReactDOM.createRoot(document.querySelector('#app'))
+        class Table extends React.Component {
+            state = {
+                books: [{
+                    id: 0,
+                    name: '算法导论',
+                    date: '2006-9',
+                    price: 85,
+                    count: 1
+                },
+                {
+                    name: 'UNIX编程艺术',
+                    date: '2006-2',
+                    price: 59,
+                    id: 1,
+                    count: 1
+                }],
+            }
+
+
+            getTotalPrice() {
+                return this.state.books.reduce((previousValue, currentValue) => {
+                    return previousValue + currentValue.price * currentValue.count
+                }, 0)
+            }
+
+            changeCount(item, type) {
+                const index = this.state.books.findIndex(book => book.id == item.id)
+                const { books } = this.state
+                type == 'increment' ? books[index].count-- : books[index].count++
+                this.setState({
+                    books
+                })
+                this.getTotalPrice()
+            }
+
+            remove(item) {
+                this.setState({
+                    books: this.state.books.filter(book => book.id !== item.id)
+                })
+            }
+
+
+            renderBooks() {
+                return <div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th>书籍名称</th>
+                                <th>出版日期</th>
+                                <th>价格</th>
+                                <th>购买数量</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {
+                                this.state.books.map((item, index) => {
+                                    return (
+                                        <tr key={item.id}>
+                                            <td>{index + 1}</td>
+                                            <td>《{item.name}》</td>
+                                            <td>{item.date}</td>
+                                            <td>￥{item.price}</td>
+                                            <td> <button onClick={() => { this.changeCount(item, 'increment') }} disabled={item.count == 1}>-</button> {item.count} <button onClick={() => { this.changeCount(item, 'decrement') }}>+</button></td>
+                                            <td><button onClick={() => { this.remove(item) }}>移除</button></td>
+                                        </tr>
+                                    )
+                                })
+                            }
+                        </tbody>
+                    </table>
+                    <h3>总价格：￥{this.getTotalPrice()}</h3>
+                </div>
+            }
+
+            renderEmpty() {
+                return <h2>购物车为空</h2>
+            }
+            render() {
+                return (
+                    <div>
+                        {this.state.books.length > 0 ? this.renderBooks() : this.renderEmpty()}
+                    </div>
+
+                )
+            }
+        }
+        app.render(<Table />)
+    </script>
+</body>
+
+</html>
